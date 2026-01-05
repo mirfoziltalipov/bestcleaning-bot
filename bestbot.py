@@ -99,9 +99,9 @@ async def service_selected(call: types.CallbackQuery):
     elif call.data == "carpet_clean":
         photo = "https://www.afisha.uz/uploads/media/2020/06/0690269_m.jpeg"
         caption = (
-            "🧼 *Мойка ковров*\nЦена: *20 000 сум*"
+            "🧼 *Мойка ковров*\nЦена: *20 000 сум / м²*"
             if lang == "ru" else
-            "🧼 *Gilam yuvish*\nNarx: *20 000 so‘m*"
+            "🧼 *Gilam yuvish*\nNarx: *20 000 so‘m / m²*"
         )
     elif call.data == "furniture_clean":
         photo = "https://newcleaner.uz/wp-content/uploads/2024/02/332018086_w640_h640_pylesos-karcher-puzzi.webp"
@@ -113,9 +113,9 @@ async def service_selected(call: types.CallbackQuery):
     elif call.data == "chair_clean":
         photo = "https://files.glotr.uz/company/000/015/035/products/2020/05/18/2020-05-18-10-31-24-207011-5c05beba1a1fc00a280b8bfc76fcb3fe.jpg?_=ozb9y"
         caption = (
-            "🪑 *Чистка стульев*\nЦена: *до 50 000 сум*"
+            "🪑 *Чистка стульев*\nЦена: *до 50 000 сум / за штуку*"
             if lang == "ru" else
-            "🪑 *Stul tozalash*\nNarx: *50 000 so‘m*"
+            "🪑 *Stul tozalash*\nNarx: *50 000 so‘m / donasi*"
         )
     else:
         photo = "https://best-cleaning.uz/images/canal-main.png"
@@ -185,4 +185,5 @@ async def forward_to_group(message: types.Message):
 if __name__ == "__main__":
     print("Bot started")
     executor.start_polling(dp, skip_updates=True)
+
 
