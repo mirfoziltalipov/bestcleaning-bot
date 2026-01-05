@@ -42,10 +42,10 @@ def main_menu(lang):
         kb.add(
             InlineKeyboardButton("🧹 Tozalash", callback_data="cleaning"),
             InlineKeyboardButton("🏢 Fasad yuvish", callback_data="facade_clean"),
-            InlineKeyboardButton("🧼 Gilam tozalash", callback_data="carpet_clean"),
+            InlineKeyboardButton("🧼 Gilam yuvish", callback_data="carpet_clean"),
             InlineKeyboardButton("🛋 Mebel tozalash", callback_data="furniture_clean"),
             InlineKeyboardButton("🪑 Stul tozalash", callback_data="chair_clean"),
-            InlineKeyboardButton("🚿 Kanalizatsiya", callback_data="sewer_clean")
+            InlineKeyboardButton("🚿 Kanalizatsiya tozalash", callback_data="sewer_clean")
         )
 
     return kb
@@ -101,7 +101,7 @@ async def service_selected(call: types.CallbackQuery):
         caption = (
             "🧼 *Мойка ковров*\nЦена: *20 000 сум*"
             if lang == "ru" else
-            "🧼 *Gilam tozalash*\nNarx: *20 000 so‘m*"
+            "🧼 *Gilam yuvish*\nNarx: *20 000 so‘m*"
         )
     elif call.data == "furniture_clean":
         photo = "https://newcleaner.uz/wp-content/uploads/2024/02/332018086_w640_h640_pylesos-karcher-puzzi.webp"
@@ -122,7 +122,7 @@ async def service_selected(call: types.CallbackQuery):
         caption = (
             "🚿 *Чистка канализации*\nЦена: *45 000 сум / м*"
             if lang == "ru" else
-            "🚿 *Kanalizatsiya*\nNarx: *45 000 so‘m / m*"
+            "🚿 *Kanalizatsiya tozalash*\nNarx: *45 000 so‘m / m*"
         )
 
     kb = InlineKeyboardMarkup(row_width=1)
@@ -185,3 +185,4 @@ async def forward_to_group(message: types.Message):
 if __name__ == "__main__":
     print("Bot started")
     executor.start_polling(dp, skip_updates=True)
+
