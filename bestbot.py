@@ -1,5 +1,6 @@
-from aiogram import Bot, Dispatcher, executor, types
+from aiogram import Bot, Dispatcher, types
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram import executor
 import logging
 
 # ========= НАСТРОЙКИ =========
@@ -30,15 +31,21 @@ def main_menu(lang):
 
     if lang == "ru":
         kb.add(
-            InlineKeyboardButton("🧹 Уборка дома", callback_data="home_clean"),
-            InlineKeyboardButton("🏢 Мойка фасада", callback_data="facade_clean"),
-            InlineKeyboardButton("🚿 Чистка канализаций", callback_data="sewer_clean")
+            InlineKeyboardButton("🧹 Уборка", callback_data="cleaning"),
+            InlineKeyboardButton("🏢 Мойка фасадов", callback_data="facade_clean"),
+            InlineKeyboardButton("🧼 Мойка ковров", callback_data="carpet_clean"),
+            InlineKeyboardButton("🛋 Чистка мебели", callback_data="furniture_clean"),
+            InlineKeyboardButton("🪑 Чистка стульев", callback_data="chair_clean"),
+            InlineKeyboardButton("🚿 Чистка канализации", callback_data="sewer_clean")
         )
     else:
         kb.add(
-            InlineKeyboardButton("🧹 Uy tozalash", callback_data="home_clean"),
+            InlineKeyboardButton("🧹 Tozalash", callback_data="cleaning"),
             InlineKeyboardButton("🏢 Fasad yuvish", callback_data="facade_clean"),
-            InlineKeyboardButton("🚿 Kanalizatsiya tozalash", callback_data="sewer_clean")
+            InlineKeyboardButton("🧼 Gilam tozalash", callback_data="carpet_clean"),
+            InlineKeyboardButton("🛋 Mebel tozalash", callback_data="furniture_clean"),
+            InlineKeyboardButton("🪑 Stul tozalash", callback_data="chair_clean"),
+            InlineKeyboardButton("🚿 Kanalizatsiya", callback_data="sewer_clean")
         )
 
     return kb
@@ -59,19 +66,9 @@ async def set_language(call: types.CallbackQuery):
     user_lang[call.from_user.id] = lang
 
     text = (
-        "✨ *Best Cleaning* ✨\n\n"
-        "Профессиональные клининговые услуги:\n\n"
-        "🧹 Уборка дома\n"
-        "🏢 Мойка фасада\n"
-        "🚿 Чистка канализаций\n\n"
-        "Выберите услугу 👇"
+        "✨ *Best Cleaning* ✨\n\nВыберите услугу 👇"
         if lang == "ru" else
-        "✨ *Best Cleaning* ✨\n\n"
-        "Professional tozalash xizmatlari:\n\n"
-        "🧹 Uy tozalash\n"
-        "🏢 Fasad yuvish\n"
-        "🚿 Kanalizatsiya tozalash\n\n"
-        "Xizmatni tanlang 👇"
+        "✨ *Best Cleaning* ✨\n\nXizmatni tanlang 👇"
     )
 
     await call.message.answer(
@@ -81,64 +78,57 @@ async def set_language(call: types.CallbackQuery):
     )
 
 # ===== Выбор услуги =====
-@dp.callback_query_handler(lambda c: c.data in ["home_clean", "facade_clean", "sewer_clean"])
+@dp.callback_query_handler(lambda c: c.data in ["cleaning","facade_clean","carpet_clean","furniture_clean","chair_clean","sewer_clean"])
 async def service_selected(call: types.CallbackQuery):
     lang = user_lang.get(call.from_user.id, "ru")
 
-    if call.data == "home_clean":
+    if call.data == "cleaning":
         photo = "https://best-cleaning.uz/images/bg_1.jpg"
         caption = (
-            "🧹 *Уборка дома*\n"
-            "Цена: *от 150 000 сум*\n\n"
-            "✔️ Квартиры и дома\n"
-            "✔️ Экологичные средства\n"
-            "✔️ Аккуратная работа"
+            "🧹 *Уборка*\nЦена: *350 000 сум*\nЕсли уборщицы со своими средствами — *550 000 сум*"
             if lang == "ru" else
-            "🧹 *Uy tozalash*\n"
-            "Narx: *150 000 so‘mdan*\n\n"
-            "✔️ Kvartira va uylar\n"
-            "✔️ Ekologik vositalar\n"
-            "✔️ Toza va tartibli"
+            "🧹 *Tozalash*\nNarx: *350 000 so‘m*\nAgar xodimlar o‘z vositalari bilan kelsa — *550 000 so‘m*"
         )
-
     elif call.data == "facade_clean":
         photo = "https://best-cleaning.uz/images/moyka-fasadov.jpg"
         caption = (
-            "🏢 *Мойка фасада*\n"
-            "Цена: *от 10 000 сум / м²*\n\n"
-            "✔️ Современные технологии\n"
-            "✔️ Ухоженный внешний вид"
+            "🏢 *Мойка фасадов*\nЦена: *15 000 сум / м²*"
             if lang == "ru" else
-            "🏢 *Fasad yuvish*\n"
-            "Narx: *10 000 so‘m / m² dan*\n\n"
-            "✔️ Zamonaviy texnologiyalar\n"
-            "✔️ Chiroyli tashqi ko‘rinish"
+            "🏢 *Fasad yuvish*\nNarx: *15 000 so‘m / m²*"
         )
-
+    elif call.data == "carpet_clean":
+        photo = "https://www.afisha.uz/uploads/media/2020/06/0690269_m.jpeg"
+        caption = (
+            "🧼 *Мойка ковров*\nЦена: *20 000 сум*"
+            if lang == "ru" else
+            "🧼 *Gilam tozalash*\nNarx: *20 000 so‘m*"
+        )
+    elif call.data == "furniture_clean":
+        photo = "https://newcleaner.uz/wp-content/uploads/2024/02/332018086_w640_h640_pylesos-karcher-puzzi.webp"
+        caption = (
+            "🛋 *Чистка мебели*\nЦена: *100 000 сум / 1 место*"
+            if lang == "ru" else
+            "🛋 *Mebel tozalash*\nNarx: *100 000 so‘m / 1 joy*"
+        )
+    elif call.data == "chair_clean":
+        photo = "https://files.glotr.uz/company/000/015/035/products/2020/05/18/2020-05-18-10-31-24-207011-5c05beba1a1fc00a280b8bfc76fcb3fe.jpg?_=ozb9y"
+        caption = (
+            "🪑 *Чистка стульев*\nЦена: *до 50 000 сум*"
+            if lang == "ru" else
+            "🪑 *Stul tozalash*\nNarx: *50 000 so‘m*"
+        )
     else:
         photo = "https://best-cleaning.uz/images/canal-main.png"
         caption = (
-            "🚿 *Чистка канализаций*\n"
-            "Цена: *от 200 000 сум*\n\n"
-            "✔️ Устранение засоров\n"
-            "✔️ Безопасно для труб"
+            "🚿 *Чистка канализации*\nЦена: *45 000 сум / м*"
             if lang == "ru" else
-            "🚿 *Kanalizatsiya tozalash*\n"
-            "Narx: *200 000 so‘mdan*\n\n"
-            "✔️ Tiqinlarni bartaraf etish\n"
-            "✔️ Quvurlar uchun xavfsiz"
+            "🚿 *Kanalizatsiya*\nNarx: *45 000 so‘m / m*"
         )
 
     kb = InlineKeyboardMarkup(row_width=1)
     kb.add(
-        InlineKeyboardButton(
-            "📩 Оставить заявку" if lang == "ru" else "📩 Buyurtma qoldirish",
-            callback_data="order"
-        ),
-        InlineKeyboardButton(
-            "⬅️ На главное" if lang == "ru" else "⬅️ Asosiy menyu",
-            callback_data="back"
-        )
+        InlineKeyboardButton("📩 Оставить заявку" if lang == "ru" else "📩 Buyurtma qoldirish", callback_data="order"),
+        InlineKeyboardButton("⬅️ На главное" if lang == "ru" else "⬅️ Asosiy menyu", callback_data="back")
     )
 
     await call.message.answer_photo(
@@ -152,7 +142,6 @@ async def service_selected(call: types.CallbackQuery):
 @dp.callback_query_handler(lambda c: c.data == "order")
 async def leave_order(call: types.CallbackQuery):
     lang = user_lang.get(call.from_user.id, "ru")
-
     await call.message.answer(
         "📩 Отправьте заявку одним сообщением:\nИмя, телефон, адрес"
         if lang == "ru" else
@@ -172,7 +161,6 @@ async def back(call: types.CallbackQuery):
 @dp.message_handler()
 async def forward_to_group(message: types.Message):
     lang = user_lang.get(message.from_user.id, "ru")
-
     group_text = (
         "📩 *Новая заявка*\n\n"
         f"👤 {message.from_user.full_name}\n"
@@ -181,14 +169,12 @@ async def forward_to_group(message: types.Message):
     )
     await bot.send_message(GROUP_ID, group_text, parse_mode="Markdown")
 
-    # Ответ пользователю
     await message.answer(
         "✅ Заявка принята! Мы скоро свяжемся с вами."
         if lang == "ru" else
         "✅ Buyurtmangiz qabul qilindi! Tez orada siz bilan bog‘lanamiz."
     )
 
-    # Сброс языка и возврат к выбору
     user_lang.pop(message.from_user.id, None)
     await message.answer(
         "🌐 Выберите язык / Tilni tanlang:",
